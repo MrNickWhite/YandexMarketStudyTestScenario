@@ -1,19 +1,11 @@
 package ru.yandex;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.*;
-
-import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -38,9 +30,21 @@ public class Tests extends BaseTest {
         List<WebElement> goodsResult = yandexMarketCategorySearchPage.getResults(estimatedCount);
         Assertions.assertTrue(goodsResult.size()>=estimatedCount, String.format("Колличество товаров в поисковой выдаче меньше чем %s", estimatedCount) );
         for (int i = 0; i < estimatedCount; i++) {
-            Assertions.assertTrue(yandexMarketCategorySearchPage.isContainCompanyName(companiesArr, goodsResult.get(i))==true,"В результатах поисковой выдачи найдена карточка товара без требуемых производителей");
-            Assertions.assertTrue(yandexMarketCategorySearchPage.isPriceInRange(minPrice, maxPrice, goodsResult.get(i))==true, "В результатах поисковой выдачи найдена карточка товара с несоответсвующей фильтру ценой");
+            Assertions.assertTrue(yandexMarketCategorySearchPage.isContainCompanyName(companiesArr, goodsResult.get(i)) == true, "В результатах поисковой выдачи найдена карточка товара без требуемых производителей");
+            Assertions.assertTrue(yandexMarketCategorySearchPage.isPriceInRange(minPrice, maxPrice, goodsResult.get(i)) == true, "В результатах поисковой выдачи найдена карточка товара с несоответсвующей фильтру ценой");
         }
+        String searchedProduct = yandexMarketCategorySearchPage.getNameOnGoodsCard(goodsResult.get(0));
+        yandexMarketCategorySearchPage.findProduct(searchedProduct);
+        Thread.sleep(10000);
+        goodsResult = yandexMarketCategorySearchPage.getResults(estimatedCount);
+        boolean isContent = false;
+        for (int i = 0; i < estimatedCount; i++){
+            if(yandexMarketCategorySearchPage.getNameOnGoodsCard(goodsResult.get(i)).equals(searchedProduct)){
+                isContent = true;
+                break;
+            }
+        }
+        Assertions.assertTrue(isContent==true,"Искомого товара в результатах поиска не обнаружено");
     }
 
 }

@@ -5,15 +5,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
-import javax.swing.*;
 
 public class YandexMarketMainPage {
 
     WebDriver chromeDriver;
 
-    @FindBy(xpath = "//input[@type='text']")
+    @FindBy(xpath = "//div[not(@style='display:none')]/div[@data-zone-name='search_block']//input[@type='text']")
     WebElement searchField;
-
+    @FindBy(xpath = "//div[not(@style='display:none')]/div[@data-zone-name='search_block']//button[@type='submit']")
+    WebElement searchButton;
     @FindBy(xpath = "//button[@id='catalogPopupButton']")
     WebElement catalogButton;
     @FindBy(xpath = "//div[@data-zone-name='catalog-content']//li//span[text()='Ноутбуки и компьютеры']")
@@ -23,11 +23,17 @@ public class YandexMarketMainPage {
 
     public YandexMarketMainPage(WebDriver chromeDriver){this.chromeDriver = chromeDriver;}
 
-    public void openCategory() throws InterruptedException {
+    public void openCategory(){
         catalogButton.click();
         Actions action = new Actions(chromeDriver);
         action.moveToElement(catalogCategory).perform();
         action.moveToElement(catalogLaptopCategory).click().perform();
+    }
+
+    public void findProduct(String productName){
+        searchField.click();
+        searchField.sendKeys(productName);
+        searchButton.click();
     }
 
 }
