@@ -15,7 +15,7 @@ public class Tests extends BaseTest {
 
     @ParameterizedTest
     @CsvSource({"10000, 90000, Huawei Lenovo, 12"})
-    public void yandexMarketTest(int minPrice, int maxPrice, String companies, int estimatedCount) throws InterruptedException {
+    public void yandexMarketTest(int minPrice, int maxPrice, String companies, int estimatedCount){
         chromeDriver.get("https://ya.ru/");
         YandexSearchPage yandexSearchPage = PageFactory.initElements(chromeDriver, YandexSearchPage.class);
         yandexSearchPage.openMarketPage();
@@ -33,13 +33,13 @@ public class Tests extends BaseTest {
             Assertions.assertTrue(yandexMarketCategorySearchPage.isContainCompanyName(companiesArr, goodsResult.get(i)) == true, "В результатах поисковой выдачи найдена карточка товара без требуемых производителей");
             Assertions.assertTrue(yandexMarketCategorySearchPage.isPriceInRange(minPrice, maxPrice, goodsResult.get(i)) == true, "В результатах поисковой выдачи найдена карточка товара с несоответсвующей фильтру ценой");
         }
-        String searchedProduct = yandexMarketCategorySearchPage.getNameOnGoodsCard(goodsResult.get(0));
+        String searchedProduct = yandexMarketCategorySearchPage.getNameOnProductCard(goodsResult.get(0));
         yandexMarketCategorySearchPage.findProduct(searchedProduct);
         //Thread.sleep(10000);
         goodsResult = yandexMarketCategorySearchPage.getResults(estimatedCount);
         boolean isContent = false;
         for (int i = 0; i < estimatedCount; i++){
-            if(yandexMarketCategorySearchPage.getNameOnGoodsCard(goodsResult.get(i)).equals(searchedProduct)){
+            if(yandexMarketCategorySearchPage.getNameOnProductCard(goodsResult.get(i)).equals(searchedProduct)){
                 isContent = true;
                 break;
             }

@@ -77,20 +77,20 @@ public class YandexMarketCategorySearchPage extends YandexMarketMainPage {
         return searchGoodsResult;
     }
 
-    public int getPriceOnGoodsCard(WebElement goodsCard){
-        String s = goodsCard.findElement(By.xpath(".//div[@data-zone-name='price']")).getText();
+    public int getPriceOnProductCard(WebElement productCard){
+        String s = productCard.findElement(By.xpath(".//div[@data-zone-name='price']")).getText();
         String[] arrS = s.split("₽");
         s = arrS[0].replaceAll("[^0-9]", "");
         return Integer.parseInt(s);
     }
 
-    public String getNameOnGoodsCard(WebElement goodsCard){
-        String s = goodsCard.findElement(By.xpath(".//h3[@data-zone-name='title']")).getText();
-        return s;
+    public String getNameOnProductCard(WebElement productCard){
+        String productname = productCard.findElement(By.xpath(".//h3[@data-zone-name='title']")).getText();
+        return productname;
     }
 
-    public boolean isContainCompanyNameOnGoodsPage(String[] companies, WebElement goodsCard) {
-        goodsCard.findElement(By.xpath(".//h3[@data-zone-name='title']/a")).click();
+    public boolean isContainCompanyNameOnGoodsPage(String[] companies, WebElement productCard) {
+        productCard.findElement(By.xpath(".//h3[@data-zone-name='title']/a")).click();
         chromeDriver.switchTo().window(chromeDriver.getWindowHandles().toArray()[2].toString());
         YandexProductPage yandexProductPage = PageFactory.initElements(chromeDriver, YandexProductPage.class);
         yandexProductPage.openSpecsPage();
@@ -105,18 +105,18 @@ public class YandexMarketCategorySearchPage extends YandexMarketMainPage {
         }
         return false;
     }
-    public boolean isContainCompanyName(String[] companies, WebElement goodsCard)  {
-        String goodsCardHeader = getNameOnGoodsCard(goodsCard);
+    public boolean isContainCompanyName(String[] companies, WebElement productCard)  {
+        String goodsCardHeader = getNameOnProductCard(productCard);
         for (String company : companies){
             if (goodsCardHeader.toLowerCase().contains(company.toLowerCase())) {
                 return true;
             }
         }
-        return isContainCompanyNameOnGoodsPage(companies, goodsCard);
+        return isContainCompanyNameOnGoodsPage(companies, productCard);
     }
 
-    public boolean isPriceInRange(int minPrice, int maxPrice, WebElement goodsCard){
-        int goodsUnitPrice = getPriceOnGoodsCard(goodsCard);
+    public boolean isPriceInRange(int minPrice, int maxPrice, WebElement productCard){
+        int goodsUnitPrice = getPriceOnProductCard(productCard);
         if (goodsUnitPrice>=minPrice && goodsUnitPrice<=maxPrice) return true;
         return false;
     }
