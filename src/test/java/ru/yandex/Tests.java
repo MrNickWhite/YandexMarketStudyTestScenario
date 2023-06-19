@@ -26,7 +26,7 @@ public class Tests extends BaseTest {
         yandexMarketCategorySearchPage.setPrices(minPrice, maxPrice);
         String[] companiesArr = companies.split(" ");
         yandexMarketCategorySearchPage.setCompanies(companiesArr);
-        Thread.sleep(10000);
+        //Thread.sleep(10000);
         List<WebElement> goodsResult = yandexMarketCategorySearchPage.getResults(estimatedCount);
         Assertions.assertTrue(goodsResult.size()>=estimatedCount, String.format("Колличество товаров в поисковой выдаче меньше чем %s", estimatedCount) );
         for (int i = 0; i < estimatedCount; i++) {
@@ -35,7 +35,7 @@ public class Tests extends BaseTest {
         }
         String searchedProduct = yandexMarketCategorySearchPage.getNameOnGoodsCard(goodsResult.get(0));
         yandexMarketCategorySearchPage.findProduct(searchedProduct);
-        Thread.sleep(10000);
+        //Thread.sleep(10000);
         goodsResult = yandexMarketCategorySearchPage.getResults(estimatedCount);
         boolean isContent = false;
         for (int i = 0; i < estimatedCount; i++){

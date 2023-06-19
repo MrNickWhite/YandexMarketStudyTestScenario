@@ -3,11 +3,13 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,11 +23,10 @@ public class YandexMarketCategorySearchPage extends YandexMarketMainPage {
     WebElement companyShowMore;
     @FindBy(xpath = "//div[contains(@data-zone-data,'Производитель')]//input[@type='text']")
     WebElement companyFilterSearchField;
+    @FindBy(xpath = "//div[contains(@data-zone-data,'Производитель')]//button")
+    WebElement companyFilterSearchFieldRemove;
     @FindBy(xpath = "//div[contains(@data-zone-data,'Производитель')]//div[@data-zone-name='FilterValue']/label")
     WebElement filterCompanySelectCheckbox;
-    @FindBy(xpath = "//span[@role='button' and contains(text(),'Найдено')]")
-    WebElement searchShortResult;
-
     @FindBy(xpath = "//article[@data-autotest-id='product-snippet']")
     List<WebElement> searchGoodsResult;
 
@@ -39,24 +40,29 @@ public class YandexMarketCategorySearchPage extends YandexMarketMainPage {
         maxPriceField.click();
         maxPriceField.sendKeys(String.valueOf(maxPrice));
     }
-
-    public boolean isResultReady(){
-        System.out.println(searchShortResult.getText());
-        return true;
+     public void waitForSearchResults(){
+        WebDriverWait wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(5));
+        chromeDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@data-grabber='SearchSerp']/div[@data-auto='preloader']//span[@role='progressbar']")));
+        wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//div[@data-grabber='SearchSerp']/div[@data-auto='preloader']//span[@role='progressbar']"),0));
+        chromeDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
-    public void setCompanies(String[] companies) throws InterruptedException {
 
-        Thread.sleep(8000);
+
+    public void setCompanies(String[] companies){
+
+        WebDriverWait wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(5));
+        waitForSearchResults();
         companyShowMore.click();
         for (String s : companies) {
             companyFilterSearchField.click();
             companyFilterSearchField.sendKeys(s);
-            Thread.sleep(3000);
+            wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//div[contains(@data-zone-data,'Производитель')]//div[@data-zone-name='FilterValue']/label"),1));
             filterCompanySelectCheckbox.click();
-            Thread.sleep(3000);
-            companyFilterSearchField.clear();
+            waitForSearchResults();
+            companyFilterSearchFieldRemove.click();
+            wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//div[contains(@data-zone-data,'Производитель')]//div[@data-zone-name='FilterValue']/label"),1));
         }
-
     }
 
     public List<WebElement> getResults(int estimatedCount){
@@ -83,7 +89,7 @@ public class YandexMarketCategorySearchPage extends YandexMarketMainPage {
         return s;
     }
 
-    public boolean isContainCompanyNameOnGoodsPage(String[] companies, WebElement goodsCard) throws InterruptedException {
+    public boolean isContainCompanyNameOnGoodsPage(String[] companies, WebElement goodsCard) {
         goodsCard.findElement(By.xpath(".//h3[@data-zone-name='title']/a")).click();
         chromeDriver.switchTo().window(chromeDriver.getWindowHandles().toArray()[2].toString());
         YandexProductPage yandexProductPage = PageFactory.initElements(chromeDriver, YandexProductPage.class);
@@ -99,7 +105,7 @@ public class YandexMarketCategorySearchPage extends YandexMarketMainPage {
         }
         return false;
     }
-    public boolean isContainCompanyName(String[] companies, WebElement goodsCard) throws InterruptedException {
+    public boolean isContainCompanyName(String[] companies, WebElement goodsCard)  {
         String goodsCardHeader = getNameOnGoodsCard(goodsCard);
         for (String company : companies){
             if (goodsCardHeader.toLowerCase().contains(company.toLowerCase())) {
