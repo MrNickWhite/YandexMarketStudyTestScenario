@@ -20,6 +20,7 @@ public class YandexSearchPage {
 
     public YandexSearchPage(WebDriver chromeDriver){this.chromeDriver = chromeDriver;}
 
+
     public void openMarketPage(){
         searchField.click();
         allServicesButton.click();

@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.List;
+
 
 public class YandexMarketMainPage {
 
@@ -16,18 +18,29 @@ public class YandexMarketMainPage {
     WebElement searchButton;
     @FindBy(xpath = "//button[@id='catalogPopupButton']")
     WebElement catalogButton;
-    @FindBy(xpath = "//div[@data-zone-name='catalog-content']//li//span[text()='Ноутбуки и компьютеры']")
-    WebElement catalogCategory;
-    @FindBy(xpath = "//div[@role='tabpanel']//ul//a[text()='Ноутбуки']")
-    WebElement catalogLaptopCategory;
+    @FindBy(xpath = "//div[@data-zone-name='catalog-content']//li//span")
+    List<WebElement> catalogCategory;
+    @FindBy(xpath = "//div[@role='tabpanel']//ul//a")
+    List<WebElement> catalogLaptopCategory;
 
     public YandexMarketMainPage(WebDriver chromeDriver){this.chromeDriver = chromeDriver;}
 
-    public void openCategory(){
+    public void openCategory(String categoryName, String subCategoryName){
         catalogButton.click();
         Actions action = new Actions(chromeDriver);
-        action.moveToElement(catalogCategory).perform();
-        action.moveToElement(catalogLaptopCategory).click().perform();
+        for (WebElement category : catalogCategory){
+            if(category.getText().equals(categoryName)){
+                action.moveToElement(category).perform();
+                for (WebElement subCategory : catalogLaptopCategory){
+                    if (subCategory.getText().equals(subCategoryName)){
+                        action.moveToElement(subCategory).click().perform();
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+
     }
 
     public void findProduct(String productName){
