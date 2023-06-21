@@ -112,7 +112,6 @@ public class YandexMarketCategorySearchPage extends YandexMarketMainPage {
                 companyFilterSearchField.sendKeys(searchedCompany);
                 wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//div[contains(@data-zone-data,'Производитель')]//div[@data-zone-name='FilterValue']/label"),1));
                 for (WebElement company : filterCompanySelectCheckbox){
-                    System.out.println(company.getText().toLowerCase().contains(searchedCompany.toLowerCase()) + company.getText().toLowerCase() + searchedCompany.toLowerCase());
                     if (company.getText().toLowerCase().contains(searchedCompany.toLowerCase())){
                         company.click();
                         waitForSearchResults();
@@ -122,6 +121,7 @@ public class YandexMarketCategorySearchPage extends YandexMarketMainPage {
                 wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//div[contains(@data-zone-data,'Производитель')]//div[@data-zone-name='FilterValue']/label"),1));
             }
             else{
+
                 for (WebElement company : filterCompanySelectCheckbox){
                     if (company.getText().toLowerCase().contains(searchedCompany.toLowerCase())){
                         company.click();
