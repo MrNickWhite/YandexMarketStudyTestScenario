@@ -14,9 +14,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.jupiter.version>5.9.2</junit.jupiter.version>
         <seleniumhq.selenium>4.9.1</seleniumhq.selenium>
-        <qameta.allure>2.13.6</qameta.allure>
+        <qameta.allure>2.22.2</qameta.allure>
         <aspectj.version>1.9.4</aspectj.version>
-        <allure.version>2.13.0</allure.version>
+        <allure.version>2.22.2</allure.version>
         <aeonbits.owner.version>1.0.4</aeonbits.owner.version>
     </properties>
 
@@ -53,6 +53,7 @@
             <version>${qameta.allure}</version>
         </dependency>
 
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -60,17 +61,38 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.aeonbits.owner</groupId>
+            <artifactId>owner</artifactId>
+            <version>${aeonbits.owner.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.6</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-maven -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-maven</artifactId>
+            <version>2.12.0</version>
+        </dependency>
+
 
     </dependencies>
 
-    <build>
+   <build>
         <plugins>
             <plugin>
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
-                <version>2.10.0</version>
+                <version>2.12.0</version>
                 <configuration>
-                    <reportVersion>2.13.6</reportVersion>
+                    <reportVersion>${qameta.allure}</reportVersion>
                     <resultsDirectory>${basedir}/allure-results</resultsDirectory>
                     <reportDirectory>${basedir}/target/allure-reports</reportDirectory>
                 </configuration>
@@ -103,5 +125,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

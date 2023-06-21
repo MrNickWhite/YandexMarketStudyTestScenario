@@ -1,5 +1,7 @@
 package pages;
 
+import helpers.Properties;
+import helpers.TestProperties;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -89,10 +91,10 @@ public class YandexMarketCategorySearchPage extends YandexMarketMainPage {
      */
      public void waitForSearchResults(){
         WebDriverWait wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(5));
-        chromeDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
+        chromeDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Properties.testProperties.fastWait()));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@data-grabber='SearchSerp']/div[@data-auto='preloader']//span[@role='progressbar']")));
         wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//div[@data-grabber='SearchSerp']/div[@data-auto='preloader']//span[@role='progressbar']"),0));
-        chromeDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        chromeDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Properties.testProperties.slowWait()));
     }
 
     /**
@@ -100,7 +102,6 @@ public class YandexMarketCategorySearchPage extends YandexMarketMainPage {
      * @author Паничев Н.В.
      */
     public void setCompanies(String[] companies){
-
         WebDriverWait wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(5));
         waitForSearchResults();
         companyShowMore.click();

@@ -1,5 +1,6 @@
 package ru.yandex;
 
+import helpers.Properties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
@@ -23,7 +24,7 @@ public class BaseTest {
         System.setProperty("webdriver.chrome.driver", System.getenv("CHROME_DRIVER"));
         chromeDriver = new ChromeDriver();
         chromeDriver.manage().window().maximize();
-        chromeDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        chromeDriver.manage().timeouts().implicitlyWait(Properties.testProperties.slowWait(), TimeUnit.SECONDS);
     }
     /**
      * Метод для закрытия окна браузера после выполнения теста
