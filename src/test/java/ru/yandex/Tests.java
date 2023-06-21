@@ -19,7 +19,7 @@ public class Tests extends BaseTest {
 
 
     @ParameterizedTest(name = "Тестирование страницы Яндекс Маркет")
-    @CsvSource({"10000, 90000, Huawei Lenovo, 12, Ноутбуки и компьютеры, Ноутбуки"})
+    @CsvSource({"10000, 90000, Huawei Lenovo, 12, Ноутбуки и компьютеры, Ноутбуки", "50000, 75000, Samsung Apple ZTE, 20, Электроника, Смартфоны"})
     public void yandexMarketTest(int minPrice, int maxPrice, String companies, int estimatedCount, String categoryName, String subCategoryName){
         String[] companiesArr = companies.split(" ");
         StepsAll.openSite(Properties.testProperties.yandexUrl(),chromeDriver);

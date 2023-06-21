@@ -57,7 +57,7 @@ public class YandexMarketCategorySearchPage extends YandexMarketMainPage {
      * @author Паничев Н.В.
      */
     @FindBy(xpath = "//div[contains(@data-zone-data,'Производитель')]//div[@data-zone-name='FilterValue']/label")
-    WebElement filterCompanySelectCheckbox;
+    List<WebElement> filterCompanySelectCheckbox;
 
     /**
      * Переменная для хранения списка товаров в поисковой выдаче
@@ -83,6 +83,7 @@ public class YandexMarketCategorySearchPage extends YandexMarketMainPage {
         minPriceField.sendKeys(String.valueOf(minPrice));
         maxPriceField.click();
         maxPriceField.sendKeys(String.valueOf(maxPrice));
+        waitForSearchResults();
     }
 
     /**
@@ -103,16 +104,31 @@ public class YandexMarketCategorySearchPage extends YandexMarketMainPage {
      */
     public void setCompanies(String[] companies){
         WebDriverWait wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(5));
-        waitForSearchResults();
+
         companyShowMore.click();
-        for (String s : companies) {
-            companyFilterSearchField.click();
-            companyFilterSearchField.sendKeys(s);
-            wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//div[contains(@data-zone-data,'Производитель')]//div[@data-zone-name='FilterValue']/label"),1));
-            filterCompanySelectCheckbox.click();
-            waitForSearchResults();
-            companyFilterSearchFieldRemove.click();
-            wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//div[contains(@data-zone-data,'Производитель')]//div[@data-zone-name='FilterValue']/label"),1));
+        for (String searchedCompany : companies) {
+            if (!chromeDriver.findElements(By.xpath("//div[contains(@data-zone-data,'Производитель')]//input[@type='text']")).isEmpty()){
+                companyFilterSearchField.click();
+                companyFilterSearchField.sendKeys(searchedCompany);
+                wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//div[contains(@data-zone-data,'Производитель')]//div[@data-zone-name='FilterValue']/label"),1));
+                for (WebElement company : filterCompanySelectCheckbox){
+                    System.out.println(company.getText().toLowerCase().contains(searchedCompany.toLowerCase()) + company.getText().toLowerCase() + searchedCompany.toLowerCase());
+                    if (company.getText().toLowerCase().contains(searchedCompany.toLowerCase())){
+                        company.click();
+                        waitForSearchResults();
+                    }
+                }
+                companyFilterSearchFieldRemove.click();
+                wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//div[contains(@data-zone-data,'Производитель')]//div[@data-zone-name='FilterValue']/label"),1));
+            }
+            else{
+                for (WebElement company : filterCompanySelectCheckbox){
+                    if (company.getText().toLowerCase().contains(searchedCompany.toLowerCase())){
+                        company.click();
+                        waitForSearchResults();
+                    }
+                }
+            }
         }
     }
 
