@@ -9,10 +9,18 @@ import java.util.HashMap;
 import java.util.List;
 
 public class YandexProductSpecsPage extends YandexMarketMainPage{
+    /**
+     * Переменная для хранения списка строк таблицы характеристик
+     * @author Паничев Н.В.
+     */
     @FindBy(xpath = "//div[@data-auto='offer-specs']/div")
     List<WebElement> specs;
     public YandexProductSpecsPage(WebDriver chromeDriver){super(chromeDriver);}
 
+    /**
+     * Метод возвращающий характеристики товара в виде HashMap
+     * @author Паничев Н.В.
+     */
     public HashMap<String, String> getSpecs(){
         HashMap<String, String> specsMap = new HashMap<>();
         for (WebElement x : specs) {
